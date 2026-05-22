@@ -2,23 +2,6 @@
 # -*- coding: utf-8 -*-
 """
 THORACIS AI - Operation Oracle: Democratized Lung Screening System
-Complete version with:
-- Background subtraction for antenna coupling removal (linear domain)
-- Higher audio gain for lung sound recording
-- Fixed audio sample rate detection
-- Proper JSON parsing for NOMA AI sync
-- Clinical assessment questionnaire (respiratory-focused)
-- Microwave-only classifier (healthy/tumor)
-- Fusion model integration (840 features)
-- Microwave scan gives immediate result
-- Fixed exit button (always visible)
-- Explainability visualizations with proper layout
-- Operation Oracle unified dashboard tab
-- Cross-modal alerts with NOMA AI using /opt/oracle_share
-- Multi-angle microwave imaging
-- Acoustic analysis with YAMNet
-- Health Passport integration
-- Data Collection Mode for phantom scanning
 """
 
 import os
