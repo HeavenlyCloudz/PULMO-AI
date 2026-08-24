@@ -1,4 +1,4 @@
-# THORACIS AI 🫁
+# THORACIS AI: Operation Oracle
 
 **An integrated acoustic-microwave fusion platform for non-invasive, accessible lung cancer screening**
 
@@ -6,14 +6,14 @@ THORACIS AI is a research-driven biomedical engineering project that combines mi
 
 ---
 
-## 🔭 Overview
+## Overview
 
 Lung cancer remains the leading cause of cancer death worldwide, largely due to late-stage diagnosis. Current screening methods like low-dose CT scans are effective but face significant barriers:
 
-- **💰 Cost:** CT scanners cost $100,000+ and require specialized facilities
-- **☢️ Radiation:** Cumulative radiation exposure limits repeated screening
-- **🌍 Accessibility:** Rural and remote communities lack access to screening infrastructure
-- **👨‍⚕️ Expertise:** Shortage of radiologists to interpret results, especially in low-income regions
+- **Cost:** CT scanners cost $100,000+ and require specialized facilities
+- **Radiation:** Cumulative radiation exposure limits repeated screening
+- **Accessibility:** Rural and remote communities lack access to screening infrastructure
+- **Expertise:** Shortage of radiologists to interpret results, especially in low-income regions
 
 THORACIS AI addresses these challenges through a novel **dual-modality fusion approach** combining:
 
@@ -25,35 +25,62 @@ The entire system is built on low-cost, off-the-shelf components and is complete
 
 ---
 
-## ✨ Features
+## Features
 
-### 🔬 Microwave Imaging
-- **4-antenna switched array** for multi-angle transmission measurements
-- **2-3 GHz frequency range** optimized for lung tissue penetration
-- **S21 parameter analysis** for detecting dielectric property variations
-- **Tumor detection threshold:** ~4.9 dB signal drop for 2cm simulated masses
-- **Spatial sensitivity:** Signal variation with tumor position enables localization
+### Microwave Imaging
+- 4-antenna switched array for multi-angle transmission measurements
+- 2-3 GHz frequency range optimized for lung tissue penetration
+- S21 parameter analysis for detecting dielectric property variations
+- **Background subtraction** in linear domain (not dB) to remove antenna coupling
+- Multi-angle scanning (0, 120, 240 degrees) for 3D localization
+- Tumor detection threshold: ~4.9 dB signal drop for 2cm simulated masses
 
-### 🎧 Acoustic Analysis
-- **YAMNet-based feature extraction** (1,024-dimensional embeddings)
-- **5-class classification:** COPD, Asthma, Pneumonia, Healthy, Bronchial
-- **Digital stethoscope integration** with dual-microphone setup
-- **Real-time audio processing** capability
+### Acoustic Analysis
+- YAMNet-based feature extraction (1,024-dimensional embeddings)
+- 5-class classification: COPD, Asthma, Pneumonia, Healthy, Bronchial
+- Digital stethoscope integration with USB microphone support
+- Bandpass filtering (100-2000 Hz) for respiratory focus
+- Real-time audio processing capability
 
-### 🤖 Multi-Modal Fusion
-- **Feature-level concatenation** of microwave and acoustic embeddings
-- **XGBoost classifier** for unified diagnostic prediction
-- **Confidence scoring** for clinical decision support
-- **Explainability hooks** for future Grad-CAM integration
+### Multi-Modal Fusion
+- Feature-level concatenation of microwave and acoustic embeddings
+- XGBoost classifier for unified diagnostic prediction
+- Confidence scoring for clinical decision support
+- Explainability visualizations showing decision rationale
 
-### 🌍 Democratization
-- **Total system cost:** < $500 (fraction of traditional alternatives)
-- **Open-source hardware designs** (3D-printable enclosures)
-- **Complete software stack** available on GitHub
-- **Educational course** (in development) for community replication
+### Operation Oracle - Cross-Device Integration
+- Shared sync folder (`/opt/oracle_share`) for THORACIS AI and NOMA AI
+- Cross-modal alerts detect paraneoplastic syndromes
+- Unified patient record dashboard
+- Automatic data syncing between devices
 
+### Health Passport
+- Personal lung health record for each patient
+- Longitudinal tracking of respiratory health
+- Trend analysis and history visualization
+- Exportable health reports (CSV format)
 
-## 🧰 Hardware Components
+### Clinical Assessment Module
+- Respiratory-focused questionnaire
+- Integration with AI predictions
+- Risk level calculation (LOW/MODERATE/HIGH)
+- Educational content for patient literacy
+
+### Explainable AI
+- Acoustic spectrogram visualization with feature overlays
+- Microwave S21 trace display with tumor contrast
+- Fusion decision explanation with cross-modal agreement
+- Background subtraction demonstration
+
+### Democratization
+- Total system cost: < $500 (fraction of traditional alternatives)
+- Open-source hardware designs (3D-printable enclosures)
+- Single Python script for all functionality
+- Educational course content integrated into the app
+
+---
+
+## Hardware Components
 
 ### Core Components
 | Component | Quantity | Purpose | Approx. Cost |
@@ -65,584 +92,549 @@ The entire system is built on low-cost, off-the-shelf components and is complete
 | SMA Cables (Bingfu) | Multiple | RF signal routing | $45.99 |
 | 2N2222 NPN Transistors | 2 | Switch control interface | Included in kit |
 | 1kΩ Resistors | 2 | Current limiting for transistors | Included in kit |
-| Breadboard | 1 | Prototyping circuit assembly | Included in kit |
-| Jumper Wires & Alligator Clips | Various | Connections to RF switches | Included in kit |
 
 ### Acoustic Components
 | Component | Quantity | Purpose | Approx. Cost |
 |-----------|----------|---------|--------------|
-| BOYA BY-M1S Lavalier Microphones | 2 | Stereo lung sound capture | $49.30 |
-| Primacare Stethoscope (modified) | 2 | Professional acoustic coupling | $24.90 |
-| UGREEN USB-C to 3.5mm Adapter | 2 | Microphone connection to Pi | $31.98 |
-
-### Phantom Materials
-| Component | Quantity | Purpose | Approx. Cost |
-|-----------|----------|---------|--------------|
-| Agar Agar Powder | 1 | Tissue-mimicking gel base | $14.95 |
-| Polyethylene Foam Padding | 1 | Low-signal-loss enclosure | $25.89 |
-| Clear Silicone Caulk | 1 | Low-loss adhesive | $32.90 |
-| 7-inch HDMI Touch Display | 1 | Interactive GUI (optional) | $69.99 |
+| USB Condenser Microphone | 1 | Lung sound capture | $20-50 |
+| Primacare Stethoscope (modified) | 1 | Professional acoustic coupling | $24.90 |
 
 **Total System Cost:** ~$450-500 (significantly less than traditional medical imaging)
 
 ---
 
-## 💻 Software Components
+## Software Dependencies
 
-### Core Scripts
-
-| Script | Description |
-|--------|-------------|
-| `switch_controller.py` | Handles digital control of Tx and Rx RF switches via GPIO |
-| `vna_interface.py` | Interfaces with NanoVNA to acquire S21 transmission data |
-| `array_scanner.py` | Iterates through antenna combinations and records measurements |
-| `calibration.py` | Applies baseline subtraction and normalization |
-| `feature_extraction.py` | Converts raw S21 traces into ML-ready features |
-| `audio_processor.py` | Captures and processes lung sounds via YAMNet |
-| `fusion_classifier.py` | Combines microwave and acoustic features for unified prediction |
-| `main_cli.py` | Command-line interface for automated scanning |
-
-### Dependencies
-
-```bash
 # Core dependencies
 pip install numpy pandas scikit-learn matplotlib
-pip install tensorflow  # for YAMNet
-pip install pyserial    # for VNA communication
-pip install RPi.GPIO    # for switch control (on Pi)
-
-### YAMNet for Audio Processing
-
-YAMNet is a pre-trained deep neural network that extracts 1,024-dimensional embedding vectors from audio waveforms. These embeddings capture complex acoustic patterns indicative of pulmonary conditions.
-
-```python
-import yamnet
-import tensorflow as tf
-
-# Load pre-trained model
-yamnet_model = yamnet.yamnet_frames_model()
-yamnet_model.load_weights('yamnet.h5')
-
-# Extract embeddings from lung sound
-scores, embeddings, spectrogram = yamnet_model(audio)
-# embeddings.shape = (num_frames, 1024)
-```
+pip install tensorflow
+pip install pyserial
+pip install RPi.GPIO
+pip install sounddevice scipy
+pip install PySide6
+pip install tflite-runtime
+pip install xgboost
 
 ---
 
-## 📦 Installation
+## Installation
 
 ### 1. Clone the Repository
 
-```bash
-git clone https://github.com/HeavenlyCloudz/THORACIS AI.git
-cd THORACIS AI
-```
+
+git clone https://github.com/HeavenlyCloudz/THORACIS_AI.git
+cd THORACIS_AI
+
 
 ### 2. Install Dependencies
 
-```bash
-pip install -r requirements.txt
-```
 
-### 3. Hardware Setup
+pip install -r requirements.txt
+
+
+### 3. Setup Shared Sync Folder
+
+
+sudo mkdir -p /opt/oracle_share
+sudo chmod 777 /opt/oracle_share
+
+
+### 4. Create Models Directory
+
+
+mkdir -p data/models
+
+
+Place the following model files in `data/models/`:
+- `yamnet_working.tflite`
+- `lung_audio.tflite`
+- `thoracis_fusion_model_840features.pkl`
+- `thoracis_fusion_scaler_840features.pkl`
+- `thoracis_final_model.pkl`
+
+### 5. Hardware Setup
 
 #### RF Switch Wiring (per switch)
 
-```text
-GPIO 17 ──[1kΩ]───[2N2222 Base]
-                    Collector ──→ +5V rail
-                    Emitter ────→ RF1 pin (via alligator clip)
+text
+GPIO 17 --[1kΩ]--[2N2222 Base]
+                  Collector -- +5V rail
+                  Emitter --- RF1 pin
 
-GPIO 18 ──[1kΩ]───[2N2222 Base]
-                    Collector ──→ +5V rail
-                    Emitter ────→ RF2 pin (via alligator clip)
+GPIO 27 --[1kΩ]--[2N2222 Base]
+                  Collector -- +5V rail
+                  Emitter --- RF2 pin
 
-RF1/RF2 also have 10kΩ pull-down resistors to GND
-```
+GPIO 18 --[1kΩ]--[2N2222 Base]
+                  Collector -- +5V rail
+                  Emitter --- RF1 pin (Switch 2)
+
+GPIO 22 --[1kΩ]--[2N2222 Base]
+                  Collector -- +5V rail
+                  Emitter --- RF2 pin (Switch 2)
+
 
 #### Antenna Connections
-
-- **Switch #1 (TX):** COM → VNA CH0, Port 1 → Antenna 1, Port 2 → Antenna 2  
-- **Switch #2 (RX):** COM → VNA CH1, Port 1 → Antenna 3, Port 2 → Antenna 4  
+- **Switch #1 (TX):** COM VNA CH0, Port 1 Antenna 1, Port 2 Antenna 2
+- **Switch #2 (RX):** COM VNA CH1, Port 1 Antenna 3, Port 2 Antenna 4
 
 #### Power
-
-- Connect Pi 5V pin to breadboard positive rail  
-- Connect Pi GND pin to breadboard negative rail  
-
-### 4. Verify Installation
-
-```bash
-python test_connections.py
-```
-
-This script tests GPIO control, VNA communication, and antenna paths.
+- Connect Pi 5V pin to breadboard positive rail
+- Connect Pi GND pin to breadboard negative rail
 
 ---
 
-## 🚀 Usage
+## Usage
 
-### Quick Start
+### Run the Application
 
-```bash
-# Run a complete scan with all 4 antenna paths
-python main_cli.py --scan --output ./data/scan_001
 
-# Extract features from scan data
-python feature_extraction.py --input ./data/scan_001 --output ./features/
+python thoracis_app.py
 
-# Process audio file
-python audio_processor.py --input ./audio/patient01.wav --output ./features/audio/
 
-# Run fusion classifier
-python fusion_classifier.py --microwave ./features/microwave/ --audio ./features/audio/
-```
+### Application Workflow
 
----
+1. **Microwave Tab**: Record baseline (air) for background subtraction, then scan patient
+2. **Acoustic Tab**: Record lung sounds using USB microphone
+3. **Fusion Tab**: Combine both modalities for unified diagnosis
+4. **Health Passport**: View patient history and trends
+5. **Operation Oracle**: View cross-device data from NOMA AI
+6. **Education**: Learn about respiratory conditions
 
-## Step-by-Step Workflow
+### Data Collection Mode
 
-### 1. Calibrate System
-
-```bash
-python calibration.py --baseline --output ./calibration/
-```
-
-This records baseline measurements with no phantom present.
-
-### 2. Scan Phantom/Tissue
-
-```bash
-python array_scanner.py --phantom ./phantoms/lung_001 --output ./data/patient001/
-```
-
-The scanner cycles through all 4 antenna paths and saves S21 data.
-
-### 3. Extract Microwave Features
-
-```bash
-python feature_extraction.py --input ./data/patient001/ --output ./features/patient001/
-```
-
-**Features include:**
-
-- Mean attenuation per path  
-- Frequency-domain slope  
-- Minimum/maximum attenuation  
-- Variance across frequency  
-- Path-to-path ratios (spatial features)  
-
-### 4. Process Acoustic Data
-
-```bash
-python audio_processor.py --input ./audio/patient001.wav --output ./features/patient001/audio.npy
-```
-
-### 5. Run Fusion Prediction
-
-```bash
-python fusion_classifier.py \
-    --microwave ./features/patient001/microwave_features.csv \
-    --audio ./features/patient001/audio.npy \
-    --model ./models/fusion_xgboost.pkl
-```
+Use the Data Collection tab for systematic phantom scanning:
+- Manual RF switch control
+- CSV data export for model training
+- Multi-angle support
 
 ---
 
-## 📊 Dataset
+## Operation Oracle - Cross-Device Syncing
 
-### Acoustic Dataset
+THORACIS AI shares data with NOMA AI through `/opt/oracle_share`:
 
-**Source:** Asthma Detection Dataset Version 2 (Kaggle)
-
-#### Class Distribution
-
-| Class      | Samples |
-|------------|----------|
-| COPD       | 401      |
-| Asthma     | 288      |
-| Pneumonia  | 285      |
-| Healthy    | 133      |
-| Bronchial  | 104      |
-| **Total**  | **1,211** |
-
-**Preprocessing:**
-
-- YAMNet feature extraction (1,024-dim embeddings)  
-- Train/validation split: 80/20 with stratification  
-- Class weighting to address imbalance  
+- **Thoracis AI** writes lung scan results to `thoracis_*.json`
+- **NOMA AI** writes skin scan results to `noma_*.json`
+- Both systems monitor the folder for incoming scans
+- Cross-modal alerts detect paraneoplastic syndromes
 
 ---
 
-### Microwave Phantom Data
-
-#### Phantom Composition
-
-- Agar-based tissue-mimicking material  
-- Dielectric properties tuned to match lung tissue (εr ≈ 45–50 at 2–3 GHz)  
-- Tumor-mimicking inclusions with higher water content (εr ≈ 55–60)  
-
-#### Experimental Conditions (WITH PROOF OF CONCEPT PHANTOM)
-
-| Condition    | Description                           |
-|--------------|---------------------------------------|
-| Baseline     | Air only (no phantom)                |
-| Healthy      | Saline solution (0.9% NaCl)          |
-| Tumor        | Saline + aluminum sphere (2–3 cm)    |
-| Spatial Test | Tumor at various positions           |
-
-#### Key Results
-
-| Measurement        | S21 (dB) | Δ from Baseline |
-|--------------------|----------|-----------------|
-| Air Baseline       | -17.83   | —               |
-| Healthy Phantom    | -19.62   | -1.79 dB        |
-| Tumor Phantom      | -24.52   | -6.69 dB / -4.90 dB |
-
----
-
-## 🧠 Model Training
-
-### Acoustic Model (YAMNet + Classifier)
-
-```python
-model = tf.keras.Sequential([
-    tf.keras.layers.Dense(512, activation='relu'),
-    tf.keras.layers.BatchNormalization(),
-    tf.keras.layers.Dropout(0.3),
-    tf.keras.layers.Dense(256, activation='relu'),
-    tf.keras.layers.BatchNormalization(),
-    tf.keras.layers.Dropout(0.3),
-    tf.keras.layers.Dense(128, activation='relu'),
-    tf.keras.layers.Dropout(0.3),
-    tf.keras.layers.Dense(5, activation='softmax')
-])
-
-optimizer = Adam(learning_rate=0.001)
-loss = CategoricalCrossentropy()
-epochs = 100
-batch_size = 32
-```
-
----
-
-### Microwave Feature Classifier
-
-```python
-from xgboost import XGBClassifier
-
-model = XGBClassifier(
-    n_estimators=100,
-    max_depth=6,
-    learning_rate=0.1,
-    objective='binary:logistic'
-)
-```
-
----
-
-### Fusion Classifier
-
-```python
-microwave_features = extract_microwave_features(s21_data)
-audio_embedding = yamnet_model(audio)
-fusion_vector = np.concatenate([microwave_features, audio_embedding])
-
-fusion_model = XGBClassifier(n_estimators=150, max_depth=8)
-fusion_model.fit(X_fusion_train, y_train)
-```
-
----
-
-## 📡 Microwave Imaging Subsystem
-
-### Theory
-
-Microwave imaging leverages dielectric property contrast between healthy and malignant tissue.
-
-| Property                     | Healthy Tissue | Tumor Tissue | Difference |
-|------------------------------|---------------|--------------|------------|
-| Water Content                | ~70%          | ~85%         | Higher     |
-| Relative Permittivity (εr)   | ~45–50        | ~55–60       | +10–20%    |
-| Conductivity (σ)             | ~1.5 S/m      | ~2.5 S/m     | +60–70%    |
-
-```text
-E_total = E_incident + E_scattered
-```
-
-```text
-E_scattered ∝ ∫(contrast function × Green's function × E_incident) dV
-```
-
----
-
-### 4-Antenna Switched Array
-
-#### Switch Control Logic
-
-| Path | TX Antenna | RX Antenna | TX Switch State      | RX Switch State      |
-|------|------------|------------|----------------------|----------------------|
-| 1    | Antenna 1  | Antenna 3  | RF1=+5V, RF2=GND     | RF1=+5V, RF2=GND     |
-| 2    | Antenna 1  | Antenna 4  | RF1=+5V, RF2=GND     | RF1=GND, RF2=+5V     |
-| 3    | Antenna 2  | Antenna 3  | RF1=GND, RF2=+5V     | RF1=+5V, RF2=GND     |
-| 4    | Antenna 2  | Antenna 4  | RF1=GND, RF2=+5V     | RF1=GND, RF2=+5V     |
-
----
-
-### Data Acquisition
-
-- Frequency range: 2–3 GHz  
-- Points per sweep: 201  
-- Parameters: S21 magnitude and phase  
-- Sweep time: ~100 ms per path  
-- Total scan time: <0.5 seconds  
-
----
-
-### Feature Extraction
-
-```python
-def extract_features(s21_data, frequencies):
-    features = {}
-    for path in range(4):
-        features[f'path{path}_mean'] = np.mean(s21_data[path])
-        features[f'path{path}_std'] = np.std(s21_data[path])
-        features[f'path{path}_min'] = np.min(s21_data[path])
-        features[f'path{path}_max'] = np.max(s21_data[path])
-        slope = np.polyfit(frequencies, s21_data[path], 1)[0]
-        features[f'path{path}_slope'] = slope
-
-    features['ratio_13_14'] = features['path0_mean'] / features['path1_mean']
-    features['ratio_23_24'] = features['path2_mean'] / features['path3_mean']
-    features['asymmetry'] = (
-        features['path0_mean'] + features['path2_mean']
-    ) / (
-        features['path1_mean'] + features['path3_mean']
-    )
-
-    return features
-```
-
----
-
-## 🎵 Acoustic Analysis Subsystem
-
-### YAMNet Architecture
-
-YAMNet is based on MobileNetV1 and outputs:
-
-- Frame-level scores: 521 audio event classes  
-- Embeddings: 1,024-dimensional vectors  
-- Spectrograms: Log-mel spectrograms (96 mel bands)  
-
----
-
-### Audio Preprocessing
-
-```python
-def preprocess_audio(file_path, target_sr=16000):
-    audio, sr = librosa.load(file_path, sr=target_sr)
-    audio = audio / np.max(np.abs(audio))
-    min_length = 0.96 * target_sr
-    if len(audio) < min_length:
-        audio = np.pad(audio, (0, int(min_length - len(audio))))
-    return audio
-```
-
----
-
-### Feature Extraction with YAMNet
-
-```python
-import yamnet
-import tensorflow_hub as hub
-
-yamnet_model = hub.load('https://tfhub.dev/google/yamnet/1')
-
-scores, embeddings, spectrogram = yamnet_model(audio)
-audio_features = np.mean(embeddings, axis=0)
-```
-
----
-
-## 🔗 Multi-Modal Fusion
-
-### Feature-Level Fusion Architecture
-
-```text
-Microwave Data → Statistical Features (~20 dims)
-Acoustic Data → YAMNet Embeddings (1024 dims)
-Concatenation (~1044 dims)
-XGBoost / Neural Network
-Unified Prediction:
-• Healthy
-• Tumor Suspected
-• Infection Likely
-```
-
----
-
-### Implementation
-
-```python
-def fuse_and_predict(microwave_csv, audio_npy, model):
-    mw_features = pd.read_csv(microwave_csv).values.flatten()
-    audio_features = np.load(audio_npy)
-    fusion_vector = np.concatenate([mw_features, audio_features])
-    fusion_vector = fusion_vector.reshape(1, -1)
-    prediction = model.predict(fusion_vector)
-    confidence = model.predict_proba(fusion_vector).max()
-    return prediction, confidence
-```
-
----
-
-## 📈 Results
-
-### Acoustic Model Performance
-
-| Class      | Precision | Recall | F1-Score | Support |
-|------------|-----------|--------|----------|----------|
-| COPD       | 0.85      | 0.89   | 0.87     | 80       |
-| Asthma     | 0.82      | 0.79   | 0.80     | 58       |
-| Pneumonia  | 0.81      | 0.77   | 0.79     | 57       |
-| Healthy    | 0.76      | 0.74   | 0.75     | 27       |
-| Bronchial  | 0.73      | 0.71   | 0.72     | 21       |
-| **Overall**| **0.82**  | **0.81** | **0.81** | **243** |
-
----
-
-### Microwave Detection Results
-
-| Tumor Size | Signal Drop (dB) | Detectability |
-|------------|------------------|---------------|
-| 1 cm       | 1.2 dB           | Marginal      |
-| 2 cm       | 5.1 dB           | Clear         |
-| 3 cm       | 8.3 dB           | Strong        |
-
-Spatial sensitivity: ±2.1 dB variation with tumor position.
-
----
-
-### Fusion Preliminary Results
-
-| Modality         | Accuracy | Sensitivity | Specificity |
-|------------------|----------|------------|-------------|
-| Microwave Only   | 78%      | 81%        | 75%         |
-| Acoustic Only    | 81%      | 79%        | 83%         |
-| Fusion | 99.3%     | 99.7%        | 99.5%         |
-
----
-
-## 🔮 Future Work
-
-### Short-Term (3–6 Months)
-
-- 6-antenna expansion  
-- Fusion validation  
-- Safety documentation (<0.1 mW power)  
-
-### Medium-Term (6–12 Months)
-
-- Clinical pilot  
-- Real-time optimization (<2s inference)  
-- 3D microwave reconstruction  
-- Mobile app integration  
-
-### Long-Term (1–2 Years)
-
-- Multi-center validation  
-- Health Canada Class II pathway  
-- Custom PCB design  
-- Global deployment  
-
----
-
-## 📁 Repository Structure
-
-```text
-THORACIS AI/
-├── README.md
-├── requirements.txt
+## Repository Structure
+
+text
+THORACIS_AI/
+├── README.md                    # This file
 ├── LICENSE
-├── hardware/
-├── software/
-├── models/
-├── data/
-├── notebooks/
-├── tests/
+├── requirements.txt             # Python dependencies
+├── thoracis_app.py              # Main application (single script)
 ├── docs/
-└── examples/
-```
+│   ├── installation.md          
+│   ├── hardware_setup.md        
+│   ├── usage.md                 
+│   └── explainability.md        
+├── data/
+│   ├── scans/                   # Runtime scan data
+│   └── models/                  # ML models (not included in repo)
+├── scripts/
+│   ├── setup.sh                 
+│   └── run.sh                   
+└── .gitignore
+
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 ### Ways to Contribute
-
-- Code  
-- Hardware  
-- Data  
-- Documentation  
-- Validation  
-- Outreach  
+- Code improvements
+- Hardware design optimization
+- Additional model training
+- Documentation
+- Clinical validation
+- Global deployment
 
 ### Contribution Steps
 
-```bash
 git checkout -b feature/amazing-feature
 git commit -m 'Add amazing feature'
 git push origin feature/amazing-feature
-```
+
 
 Open a Pull Request.
 
 ---
 
-## 📄 License
+## License
 
-MIT License.
-
-You may:
-
-- Use commercially  
-- Modify  
-- Distribute  
-- Use privately  
-- Sublicense  
+MIT License. You may:
+- Use commercially
+- Modify
+- Distribute
+- Use privately
+- Sublicense
 
 Include original copyright notice.
 
 ---
 
-## 🙏 Acknowledgments
+## Contact
 
-Mentors, institutional partners, open-source contributors, and dataset providers.
-
----
-
-## 📚 Citations
-
-Microwave imaging, acoustic analysis, safety standards, and health equity literature cited in project documentation.
+Project Lead: Anie Udofia
+William Aberhart High School, Calgary, AB
+GitHub: @HeavenlyCloudz
+Repository: github.com/HeavenlyCloudz/THORACIS_AI
 
 ---
 
-## 📬 Contact
+## Support
 
-Project Lead: Anie Udofia  
-William Aberhart High School, Calgary, AB  
-GitHub: @HeavenlyCloudz  
-Repository: github.com/HeavenlyCloudz/THORACIS AI  
-
----
-
-## ⭐ Support
-
-- Star the repository  
-- Share the project  
-- Contribute  
-- Reach out for collaboration  
+- Star the repository
+- Share the project
+- Contribute
+- Reach out for collaboration
 
 Together, we can make early cancer detection accessible to all.
+
+
+txt
+# THORACIS AI Dependencies
+# Python 3.9+
+
+# Core
+numpy>=1.21.0
+pandas>=1.3.0
+scikit-learn>=0.24.0
+matplotlib>=3.4.0
+scipy>=1.7.0
+
+# Machine Learning
+tensorflow>=2.8.0
+tflite-runtime>=2.8.0
+xgboost>=1.5.0
+
+# Hardware
+pyserial>=3.5.0
+RPi.GPIO>=0.7.1
+sounddevice>=0.4.4
+
+# GUI
+PySide6>=6.2.0
+
+
+gitignore
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Data
+data/scans/
+data/models/
+*.csv
+*.npy
+*.pkl
+*.h5
+*.tflite
+
+# SQLite
+*.db
+
+# JSON
+*.json
+
+# Logs
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+
+# Local configuration
+config/local.py
+
+
+
+#!/bin/bash
+# THORACIS AI Launch Script
+
+cd "$(dirname "$0")/.."
+
+# Activate virtual environment if it exists
+if [ -d "thoracis_env" ]; then
+    source thoracis_env/bin/activate
+fi
+
+# Run the application
+python thoracis_app.py "$@"
+
+
+markdown
+# Installation Guide
+
+## Prerequisites
+- Raspberry Pi 4 (or Linux system with Python 3.9+)
+- NanoVNA-F V2 connected via USB
+- RF switches wired to GPIO
+- USB microphone for acoustic capture
+
+## Step 1: System Setup
+
+
+# Update system
+sudo apt update
+sudo apt upgrade -y
+
+# Install Python dependencies
+sudo apt install -y python3-pip python3-venv
+
+# Create virtual environment
+python3 -m venv thoracis_env
+source thoracis_env/bin/activate
+
+
+## Step 2: Install Python Packages
+
+
+pip install -r requirements.txt
+
+
+## Step 3: Create Required Directories
+
+
+mkdir -p data/scans data/models
+sudo mkdir -p /opt/oracle_share
+sudo chmod 777 /opt/oracle_share
+
+
+## Step 4: Add Model Files
+
+Place these files in `data/models/`:
+- `yamnet_working.tflite`
+- `lung_audio.tflite`
+- `thoracis_fusion_model_840features.pkl`
+- `thoracis_fusion_scaler_840features.pkl`
+- `thoracis_final_model.pkl`
+
+## Step 5: Hardware Wiring
+
+Follow the RF switch wiring diagram in the main README.
+
+## Step 6: Run the Application
+
+
+python thoracis_app.py
+
+
+
+markdown
+# Hardware Setup Guide
+
+## RF Switch Wiring
+
+### Components Needed
+- 2x Mini-Circuits ZFSWA-2-46 RF Switches
+- 2x 2N2222 NPN Transistors
+- 2x 1kΩ Resistors
+- Jumper wires and alligator clips
+- Breadboard
+
+### Wiring Diagram
+
+
+                   Switch 1 (TX)
+                   +----------+
+                   |          |
+   GPIO 17 ----[1kΩ]---- Base |    RF1 ---- Antenna 1
+                   | Collector|    RF2 ---- Antenna 2
+                   |          |
+                   +----------+
+                   |    |
+                   +----+----- +5V (Pi)
+                   |
+                   Emitter --- GND
+
+                   Switch 2 (RX)
+                   +----------+
+                   |          |
+   GPIO 18 ----[1kΩ]---- Base |    RF1 ---- Antenna 3
+                   | Collector|    RF2 ---- Antenna 4
+                   |          |
+                   +----------+
+                   |    |
+                   +----+----- +5V (Pi)
+                   |
+                   Emitter --- GND
+
+
+### GPIO Pin Mapping
+
+| GPIO Pin | Function |
+|----------|----------|
+| GPIO 17  | Switch 1 - RF1 control |
+| GPIO 27  | Switch 1 - RF2 control |
+| GPIO 18  | Switch 2 - RF1 control |
+| GPIO 22  | Switch 2 - RF2 control |
+
+### VNA Connections
+
+
+VNA CH0 (TX) ----- Switch 1 COM
+VNA CH1 (RX) ----- Switch 2 COM
+
+### Path Configurations
+
+| Path | TX Antenna | RX Antenna | GPIO 17 | GPIO 27 | GPIO 18 | GPIO 22 |
+|------|------------|------------|---------|---------|---------|---------|
+| 1    | 1          | 3          | HIGH    | LOW     | HIGH    | LOW     |
+| 2    | 1          | 4          | HIGH    | LOW     | LOW     | HIGH    |
+| 3    | 2          | 3          | LOW     | HIGH    | HIGH    | LOW     |
+| 4    | 2          | 4          | LOW     | HIGH    | LOW     | HIGH    |
+
+## USB Microphone Setup
+
+1. Connect USB microphone to Raspberry Pi
+2. Verify detection:
+
+arecord -l
+
+3. Test recording:
+
+arecord -d 5 -f cd -t wav test.wav
+
+
+## Power Requirements
+- Raspberry Pi: 5V, 3A USB-C power supply
+- RF Switches: Powered from Pi 5V rail
+- VNA: USB power from Pi or separate USB power
+
+# Usage Guide
+
+## Running THORACIS AI
+
+
+python thoracis_app.py
+
+
+The application will launch in full-screen mode with the following tabs:
+
+## Tab 1: Microwave
+
+### Step 1: Record Baseline (Air)
+- Click "RECORD BASELINE (AIR)"
+- Ensure no phantom/patient is between antennas
+- This captures direct antenna coupling for background subtraction
+- Baseline is stored and used for all subsequent scans
+
+### Step 2: Scan Patient
+- Place patient between antennas
+- Click "SCAN PATIENT (MULTI-ANGLE)"
+- System scans at 0, 120, and 240 degrees
+- Background subtraction removes antenna coupling in linear domain
+- Results show tumor localization and confidence
+
+## Tab 2: Acoustic
+
+### Step 1: Position Microphone
+- Place modified stethoscope on patient's back
+- Connect USB microphone to Pi
+
+### Step 2: Analyze
+- Click "ANALYZE LUNG SOUNDS"
+- System records 3 seconds of audio
+- YAMNet extracts features
+- Classifier predicts condition
+- Clinical assessment questionnaire appears
+
+### Step 3: Review Results
+- Diagnosis with confidence score
+- Severity level
+- Clinical recommendations
+- Educational content
+
+## Tab 3: Fusion
+
+### Step 1: Microwave Scan
+- Click "1. SCAN MICROWAVE (MULTI-ANGLE)"
+- Requires baseline from Microwave tab
+
+### Step 2: Acoustic Analysis
+- Click "2. ANALYZE ACOUSTIC"
+- Records and classifies lung sounds
+
+### Step 3: Fusion Diagnosis
+- Click "3. RUN FUSION DIAGNOSIS"
+- Combines structural and functional data
+- Shows cross-modal agreement
+- Provides clinical recommendation
+
+## Tab 4: Health Passport
+
+- Select or create patient
+- View scan history
+- Track health trends
+- Export health report (CSV)
+
+## Tab 5: Operation Oracle
+
+- Open Unified Dashboard
+- View thoracic and skin scans
+- Cross-modal alerts
+- Paraneoplastic syndrome detection
+
+## Tab 6: Education
+
+- Learn about respiratory conditions
+- Understand the technology
+- Background subtraction explained
+- Clinical literacy resources
+
+## Tab 7: Data Collection
+
+- Manual RF switch control
+- For systematic phantom scanning
+- CSV data export for model training
+
+## Tab 8: Explainability
+
+- See how the AI makes decisions
+- Acoustic spectrogram visualization
+- Microwave S21 trace display
+- Fusion decision explanation
+- Background subtraction demonstration
+
+## Repository Update Commands
+
+After creating all files, run these commands to update your repository:
+
+# Remove old scripts (keep only thoracis_app.py)
+git rm switch_controller.py vna_interface.py array_scanner.py
+git rm calibration.py feature_extraction.py audio_processor.py
+git rm fusion_classifier.py main_cli.py
+
+# Add new files
+git add README.md requirements.txt .gitignore
+git add thoracis_app.py
+git add docs/ scripts/
+
+# Commit and push
+git commit -m "Restructure: Single thoracis_app.py with unified GUI. Remove individual scripts. Add Operation Oracle integration."
+git push origin main
